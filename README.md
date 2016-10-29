@@ -17,9 +17,36 @@ Ideas for a new programming language to address historical issues of languages a
   * Adding the postfix parentheses-list turns this into a function call
   * The actual function call itself is resolved by calling a different function
     * This is another built-in of every object that can also be overridden
+  * The address-lookup and "call" functions should only be overridden if absolutely necessary.
+    * They exist to help cover some utility-function zones and add some syntactic-sugar to allow for easier use of some facilities
 4. The basic syntax of the language is based on C
   * Multiple pass system
   * First pass is the macro-language
     * Unlike the 'CPP' macro language, this should be more like the common-lisp macro-language
   * Second pass is to resolve/load the modules
   * Third pass is actual compilation
+5. Built-in types
+  ( These all derive from 'Object', which contains some special functionality )
+  * Boolean
+  * Number  (represents classic Integers and Floats)
+    * Has the following pseudo-synonyms with stricter requirements:
+	  1. Integer
+	  2. Float
+  * Real    
+  * Complex
+    * The above two (Real and Complex) are there for those that need them
+  * Character/Glyph (represents a single ASCII/Unicode code-point)
+    * Internally the system should use UCS-2 (ie: full-width, 32-bit encoding of Unicode code-points)
+  * String
+  * Regular Expression (these are fully a part of the language, similar to how they are in Perl)
+  * Function (functions are objects, sort-of)
+6. Further thoughts:
+  * Reflection
+    * Java is a good example to follow for a lot of this, as it is decently well defined, if not well designed or documented
+  * Runtime patching
+    * Mod systems for Minecraft use a method of patching the images in-memory to get their code running. Designing this into the language from the start seems to be a better proposition - especially for a fully compiled language.
+	  * Tie this into the overridable lookup and call functions ?
+	  * Needs to account for quite a bit, might not be a good idea overall
+  * Data source tie-in system like LINQ ?
+    * Perhaps a perl-like way of doing things, where a variable can be "tied" to a backing store that implements the queries and such
+	
