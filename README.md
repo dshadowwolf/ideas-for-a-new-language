@@ -1,4 +1,9 @@
-Ideas for a new programming language to address historical issues of languages and the requirements of the modern computer.
+###Blargh!
+The documents here are the basic notes on ideas I've had over the years about ways that a programming language can be defined such that it allows the programmer the most freedom and provides facilities for doing things that might otherwise be extremely hard to do in other languages. The resulting language will also, as the ideas solidify and get written up, be designed in such a way as to take advantage of modern computer facilities, such as multiple cores and process offloading onto specialized processors such as GPU's.
+
+If you've got any ideas for improving what is here, write it up and send a pull request. Have written some code implementing parts of this? Put it into your copy of the repo and send a pull request. If I don't accept, I will try to give a cogent and well reasoned response as to why. (And... at this point the implementation language isn't defined, but I'm hoping for it to be in a reasonably portable and maintainable language that I have good knowledge of - so C would be a decent choice)
+
+###Ideas for a new programming language to address historical issues of languages and the requirements of the modern computer.
 
 1. Full module system with distinct namespaces
   * Modules have a name that fits within a global namespace for lookup
