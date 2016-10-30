@@ -3,6 +3,9 @@ The documents here are the basic notes on ideas I've had over the years about wa
 
 If you've got any ideas for improving what is here, write it up and send a pull request. Have written some code implementing parts of this? Put it into your copy of the repo and send a pull request. If I don't accept, I will try to give a cogent and well reasoned response as to why. (And... at this point the implementation language isn't defined, but I'm hoping for it to be in a reasonably portable and maintainable language that I have good knowledge of - so C would be a decent choice)
 
+####Note:
+I am not claiming to have all the answers. Large parts of this specification will likely be written by others - those same large parts that are not covered in any file with my name on it as the originator - because I have no idea what the best choice for a given part of the language might be.
+
 ###Ideas for a new programming language to address historical issues of languages and the requirements of the modern computer.
 
 1. Full module system with distinct namespaces
