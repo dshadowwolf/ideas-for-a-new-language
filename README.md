@@ -54,4 +54,8 @@ If you've got any ideas for improving what is here, write it up and send a pull 
 	  * Needs to account for quite a bit, might not be a good idea overall
   * Data source tie-in system like LINQ ?
     * Perhaps a perl-like way of doing things, where a variable can be "tied" to a backing store that implements the queries and such
+  * Multi-process...
+    * No firm ideas here, but should probably include some base concepts as well as implementations for multiple processes, multiple threads, co-routines and async workers.
+	* The base facilities should be generic enough that offloading onto a cloud processing system or a GPU should be relatively easy to implement.
+	
 	
