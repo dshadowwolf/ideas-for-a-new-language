@@ -1,3 +1,11 @@
+#This is not meant to be a true high-level language
+Rather than being a high-level language as has been discussed by many computer scientists over the years - dealing with transformations of types and allowing the compiler to choose which of the available transformations to apply - I have focused my thoughts on ways existing languages can be improved to provide more functionality and to allow the programmer to better express the solution.
+
+Hence this is what you might call a "mid-level" language. It concerns itself with telling the computer how to do things in a precise manner and leaving the reings, mostly, in the hands of the programmer. I cannot claim that this is a good choice or even a well reasoned one - all I can claim is that it was made because I have much more experience at that level and have given things at that level a lot more thought than I have for any other level of programming.
+
+These files - this README and the other files that I am the original author of - also contain some extraneous thoughts on how things might be done where I did not have a concrete concept of the solution. Many of those deal with making the language more generic and giving much of the actual specificity of the language over to the programmer so that they can better express their ideas and solutions without any overriding artificial constraints other than the base concept of the language being built around encapsulated chunks of function and data - Objects.
+
+# The rest of it
 ###Blargh!
 The documents here are the basic notes on ideas I've had over the years about ways that a programming language can be defined such that it allows the programmer the most freedom and provides facilities for doing things that might otherwise be extremely hard to do in other languages. The resulting language will also, as the ideas solidify and get written up, be designed in such a way as to take advantage of modern computer facilities, such as multiple cores and process offloading onto specialized processors such as GPU's.
 
