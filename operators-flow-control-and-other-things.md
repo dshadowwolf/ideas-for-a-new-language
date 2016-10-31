@@ -53,10 +53,10 @@
 15. AND:           &&
 16. OR:            ||
 17. XOR:           ~
-18: NOT:           !
-* 18 operators, total. One of them a partial combination of two others.
-* These follow the C/C++ standard for operators in everything except for assignment, where the Pascal standard is used. In the case of assignment the Pascal standard is used as a means to help catch a common error seen in numerous C and C++ programs.
-* I'd actually prefer it if classic math operators could be used for all of the given operations that have direct mappings, but this would make writing programs in this language difficult for people using classic keyboards.
+18. NOT:           !
+  * 18 operators, total. One of them a partial combination of two others.
+  * These follow the C/C++ standard for operators in everything except for assignment, where the Pascal standard is used. In the case of assignment the Pascal standard is used as a means to help catch a common error seen in numerous C and C++ programs.
+  * I'd actually prefer it if classic math operators could be used for all of the given operations that have direct mappings, but this would make writing programs in this language difficult for people using classic keyboards.
 
 ###Control Structures
 At its most basic, every program is a series of instructions. This is why the oldest class of languages are known as "procedural" - they are sets of instructions grouped into procedures and run in order, as needed. Even the newest functional languages operate this way, although they often contain features to delay the execution of any given set of instructions until absolutely needed and change the most basic construct from the instruction to the function. The choice of which instructions to execute and how many times is controlled by a languages set of "control structures", and as this fits well with most people thought processes we will not be changing that.
