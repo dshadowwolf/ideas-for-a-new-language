@@ -1,5 +1,9 @@
 #On the base of everything inheriting from 'Object'
 
+### __NOTE__
+The use of the term "inherit" here has been pointed out to be rather misleading. As is the inclusion of 'Object' in the default/standard types list. In truth the concept here is that there are a base set of facilities that all Objects will have and never need to use at all. Use of the 'inherits' keyword was selected to specifically note that the default implementation - or the one of the next level up in the type hierarchy - could be used via something like the C++ 'super' keyword. This would make 'Object' more like the proposed C++ Concept system.
+
+### Original Text
 As part of my ponderings on languages and giving them a large level of mutability, I thought of Perl and its "autoload methods", whereby you could have a function and a variable bound to the same name. This also brought to mind the proxy system of EcmaScript 6 and the simple "atom"/"list" dichotomy of Lisp.
 
 In an object-oriented system, no matter how much it might borrow from classic procedural languages or modern functional ones, this becomes something of a problem to implement cleanly across the entire system. A simple solution is to not care what an address actually points to and allow the compiler to resolve it at run-time. This, however, is fraught with some issues and people might want to override this built-in action. To resolve that issue and allow for other, similar, solutions to be implemented it was decided that everything in the system was to be an object, and all would inherit, implicitly, from a base object that implemented the built-in actions and concepts. Hence everything in this design descending from "Object".
