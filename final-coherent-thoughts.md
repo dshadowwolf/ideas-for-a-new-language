@@ -64,16 +64,16 @@
       * Though not discussed or mentioned, no modern language would be complete without an exception handling system
       * Should contain the basic Exceptions for the system and a generic Exception object that can be inherited from
 	  
-  ### Project Layout and Program Format
+### Project Layout and Program Format
   * Each file shall contain exactly one Class/Object
   * Hierarchies of Objects can be created via directory trees, similar to C# and Java
   * At least one Object should include a function named "main" - this will be the programs entry point
     * The name eventually chosen for the entry point function - or whatever means is chosen to specify it - should have some special semantic so that the final linking can easily find it and bind it to the initialization/closeout routines that will be used for the startup and shutdown of every program.
 	* ___NOTE___: The above exposition is only necessary if this specification allows for the user to provide their own code and/or object-files to provide the init/shutdown routines.
   * It is requested that programmers try to keep their code in some standard format, with module requirements at the start, followed by the object being defined in the file. Other than that, the only request is that people actually document the code they write.
-  
-  ### Closing Thoughts
-    As a firm believer in Test Driven Development and its capacity to help make code adhere to its agreed upon specifications, I've defined the 'Debug' module of the Standard Library to include a sub-module just for testing code. Having used several frameworks, I can see the utility of them all, but in this case I think that better programmers than I will have to make decisions about it...
+
+### Closing Thoughts
+As a firm believer in Test Driven Development and its capacity to help make code adhere to its agreed upon specifications, I've defined the 'Debug' module of the Standard Library to include a sub-module just for testing code. Having used several frameworks, I can see the utility of them all, but in this case I think that better programmers than I will have to make decisions about it...
 	
-	Other than that... TAU is, just in case you don't know, 2*PI - it is actually used in a lot more places than PI alone is. Other values that would be good to include in the "constants" section of the Math library are 'e' and the square root of 2 - both of which are, again, rather commonly used. Another that might be a good choice is Phi - the so-called "golden ratio".
+Other than that... TAU is, just in case you don't know, 2*PI - it is actually used in a lot more places than PI alone is. Other values that would be good to include in the "constants" section of the Math library are 'e' and the square root of 2 - both of which are, again, rather commonly used. Another that might be a good choice is Phi - the so-called "golden ratio".
 	
