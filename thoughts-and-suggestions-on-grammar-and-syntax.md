@@ -33,7 +33,8 @@ As noted elsewhere, the language should be structured so that every piece of it 
 
 What follows is a few examples, in a style reminiscent of C that I will define later as a proposal for the actual syntax and grammar of the language.
 
-  `import stdout from System as Out;
+  ```
+  import stdout from System as Out;
   import constants.ExecutionSuccess from OS as SUCCESS;
   
   Object example_hello_world {
@@ -42,20 +43,20 @@ What follows is a few examples, in a style reminiscent of C that I will define l
 		Out.writeln( "Hello World!" );
 		return SUCCESS;
 	}
-  }`
-  
+  }
+  ```
 Yes, the above example is the most basic example any language could have.
-
-    `Object example_of_expressions {
-	  function main() :: Integer
-	    {
-	       Integer A;
+```
+  Object example_of_expressions {
+	function main() :: Integer
+	  {
+	     Integer A;
 		 
-		   A := for( var i = 0; i < 10; i++ ) { /* do nothing */ };
-		   return A;
-	    }
-    }`
-
+		 A := for( var i = 0; i < 10; i++ ) { /* do nothing */ };
+		 return A;
+	  }
+  }
+```
 In the above example is a demonstration of exactly what "everything is an expression" actually means. The result of the 'for' loops run is put into a variable.
 
 ####Notes
