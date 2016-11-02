@@ -72,6 +72,7 @@ The exact syntax of the for-loop itself is something that needs to be decided, a
 There are other looping constructs that it might be best to borrow from functional programming - such as the "map" and "reduce" functions. Both can be highly optimized and generate blisteringly fast code - and both are actually quite useful in some data manipulation algorithms. More than that, some form of list-comprehension along with lambda functions would be a major positive to include, as both can lift some heavy burdens from the programmer and make some complex tasks easier.
 
 To that end, I would like to propose the following list of keywords/built-in root-namespace level functions:
+
 1. for
   * classic, iterative for-loop
   * could use the classic C-style format or find a different method of specifying things
