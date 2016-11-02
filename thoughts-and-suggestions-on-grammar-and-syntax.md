@@ -154,8 +154,10 @@ And the same as the lambda example above, as an anonymous function:
   ```
   
 My thoughts for lambda's and anonymous functions in this language would be:
-  `Function add10 = (Number a):Number => a + 10;
-  Function add10fun = function(Number a):Number { return a+10; };`
+```
+  Function add10 = (Number a):Number => a + 10;
+  Function add10fun = function(Number a):Number { return a+10; };
+```
   
 Note that they are both of type 'Function' and the differences are in the use of type-names and in the addition of the defined type being returned. The above example is nice, readable (once you grok the "big arrow" setup) and has a format that should be understandable and recognizable by a large number of programmers.
 
