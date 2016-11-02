@@ -33,7 +33,7 @@ As noted elsewhere, the language should be structured so that every piece of it 
 
 What follows is a few examples, in a style reminiscent of C that I will define later as a proposal for the actual syntax and grammar of the language.
 
-  import stdout from System as Out;
+  `import stdout from System as Out;
   import constants.ExecutionSuccess from OS as SUCCESS;
   
   Object example_hello_world {
@@ -42,19 +42,19 @@ What follows is a few examples, in a style reminiscent of C that I will define l
 		Out.writeln( "Hello World!" );
 		return SUCCESS;
 	}
-  }
+  }`
   
 Yes, the above example is the most basic example any language could have.
 
-  Object example_of_expressions {
-	function main() :: Integer
-	  {
-	     Integer A;
+    `Object example_of_expressions {
+	  function main() :: Integer
+	    {
+	       Integer A;
 		 
-		 A := for( var i = 0; i < 10; i++ ) { /* do nothing */ };
-		 return A;
-	  }
-  }
+		   A := for( var i = 0; i < 10; i++ ) { /* do nothing */ };
+		   return A;
+	    }
+    }`
 
 In the above example is a demonstration of exactly what "everything is an expression" actually means. The result of the 'for' loops run is put into a variable.
 
@@ -143,14 +143,18 @@ As to closures... I have no real experience with them and hence, have no opinion
 
 ####Notes
 For reference, the "big arrow" notation is (the following is (hopefully valid) ES6):
+  ```javascript
   let add10 = (a) => a + 10;
+  ```
   
 And the same as the lambda example above, as an anonymous function:
+  ```javascript
   var fun = function(a) { return a+10 };
+  ```
   
 My thoughts for lambda's and anonymous functions in this language would be:
-  Function add10 = (Number a):Number => a + 10;
-  Function add10fun = function(Number a):Number { return a+10; };
+  `Function add10 = (Number a):Number => a + 10;
+  Function add10fun = function(Number a):Number { return a+10; };`
   
 Note that they are both of type 'Function' and the differences are in the use of type-names and in the addition of the defined type being returned. The above example is nice, readable (once you grok the "big arrow" setup) and has a format that should be understandable and recognizable by a large number of programmers.
 
