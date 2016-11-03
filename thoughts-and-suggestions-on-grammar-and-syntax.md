@@ -173,5 +173,80 @@ So it seems that there is a need for another term - what to call these two relat
 
 As to the other term that makes up this sections name? Every "compilation unit" is, since it contains all the code that isn't defined in a module, an Implementation. Simple as that.
 
-###Not The End...
-This file is a collection of thoughts and suggestions for the actual structure (Syntax and Grammar) of the language and, beyond that, its actual internal functioning and how the compiler can/should work.
+###Exceptions and Error Handling
+During the era when computers were first coming into use and the base drives behind of our modern languages were being laid out and formulated, the machines had limited computing power and limited memory. These days even processors embedded in a microwave or other appliance can easily out-do the processing power of those early computers - and can usually beat them on the amount of available memory as well. But those restrictions led to languages that encoded errors as special returned values and, sometimes, used a separate global variable and a return value with special meaning.
+
+The modern solution - a complete exception system - would not have worked for them because of it adding extra code and memory requirements for keeping track of things properly. However... in any newly designed language an exception system for error handling should be included. Had one existed in Algol - or the concept itself existed in a widespread manner at all at the time - Unix would not have its "panic()" and Multics programmers would not have had to spend as much time writing code to recover from all possible error conditions.
+
+To that end, I'd like to propose this language include an exception handling system, implemented as a base type/interface of 'Exception' that can then be specialized off to represent other forms of exceptions. This object should have member-variables and functions that are callable to get many different types of information, such as the error name, a descriptive string about the exception, which module caused the exception (and on what source line and in which function), a means of getting a decent backtrace and as much else that would make a programmers job easier when they get a proper response.
+
+As it stands the classic "try/catch" syntax - or possibly the "try/catch/finally" of Java and some other languages - seems like it would be a good choice for this feature. Alongside this, I'd like to suggest the exception handling mechanism be one of the few parts of the language that is not, technically, an expression. As with some other structures, it doesn't seem likely that someone would want to put an entire exception-handling mechanism into the middle of an expression - even though I can see some people trying to do exactly that.
+
+###Destructuring, Multiple Returns and List Comprehensions
+I first ran into the idea of Destructuring in Perl, though I never realized what it was or that it was anything special at the time - to me it was just a way to assign a set of values from a list in less space than the same would have taken me in, say, C. Later I ran into it in Python, again not knowing that it had a name, but I realized how special the idea was, since swapping the values of two variables was as simple as "[a,b] = [b,a]". As I grew as a programmer I came to wish that other languages included this feature, as it made some algorithms that much easier to write. Hence, with this language, I'm proposing that Destructuring be included as a generalization of the proposed base feature of multiple return values. My proposed syntax for this matches, to a degree, the syntax used in Python:
+
+```
+Number a, b;
+[a,b] := [b,a];
+```
+
+As noted in the preceding paragraph about Destructuring, one of the base proposals for the language is that a function can return multiple values at once. As this could cause some issues with the parser and with the compiler I'd like to propose a slight modification that makes use of the proposed inclusion of Destructuring to solve those issues. To that end, the chunk of code that follows (in the format so far proposed in this document) demostrates the feature and its use:
+
+```
+import stdout from System as Out;
+import constants.ExecutionSuccess from OS as SUCCESS;
+
+Object example_of_multi_return {
+  function returns_multiple() : [Number] {
+	return [0, 1, 2, 3, 3.14159, 4, 5, 6, 6.28318];
+  }
+  
+  function main() : Integer {
+    Number z,y,x,w,v,u,t,s,r;
+	[z,y,x,w,v,u,t,s,r] := returns_multiple();
+	
+    foreach( Number a : returns_multiple() ) {
+		Out.writeln( a.toString() );
+	}
+	return SUCCESS;
+  }
+}
+```
+
+The above proposal for the syntax only covers multiple returns with a homegnous type. A more flexible notation would be required for a function to return a heterogenous mixture of types in a multiple return, though this is not an insurmountable difficulty. There is a lot of work that needs to be done to clean this proposal up and turn it into something that is truly orthogonal with the rest of the language, as the form it is in right now makes it pretty much impossible to declare a set of variables and destructure into them in the same expression. Other than that, using square-brackets - classically used to denote lists - in this manner adds extra duty to the parser and might not be sustainable, though that can remain, for now, an unadressed issue.
+
+And then there is the List Comprehension. This is, truthfully, an issue of a feature being something that is nice to have when it is needed, but does not get used in a lot of applications because it isn't needed. But because of the utility and my own wish to see as many useful features as possible in this language, I'll address my thoughts on this one here. A list comprehension is basically a combination of the idea of a monad/functor pair from Functional programming and a simplified form of generator that can be directly embedded in syntactical structure to generate the contents of a list. For the first - the monad/functor setup - the 'map' and 'reduce' functionality that comes from functional languages is already part of a proposal of features to include, which, combined with lambda functions or similar, fills in for the first type of List Comprehension.
+
+For the second type I think that a system similar to that used in Python is a good idea, but perhaps a touch difficult on the parser, as it adds an extra keyword or two and changes the semantics of how another couple work. A better base for the design is that of Javascript - what is called an "Array Comprehension" in the unimplemented ES4 and the Mozilla SpiderMonkey engine. This would add a "filter" to compliment "map" and "reduce" and add a different form to the for-loop that incorporates the potential of it having a post-fixed if-block. In truth... the actual structure of how that implementation (Mozilla SpiderMonkey) does things is my proposal. See the following for an example:
+
+```
+import stdout from System as Out;
+import constants.ExecutionSuccess from OS as SUCCESS;
+
+Object example_of_list_comprehension {
+  function get_vals() : Number[] {
+    Number[] vals = [0, 1, 2, 3, 3.14159, 4, 5, 6, 6.28318];
+	return vals;
+  }
+  
+  function main() : Integer {
+    Number[] vals := get_vals();
+	Integer[] justInts := [for(Number i of vals) if(i.isInteger()) i];
+	Float[] justFloats := [for(Number i of vals) if(i.isFloat()) i];
+	Integer[] evenNumbers := justInts.filter((i) => if(i%2==0) return True);
+
+	Out.format( "%i even numbers in %s\n", evenNumbers.length, vals.toString() );
+	Out.format( "%i floating point numbers (%s) in array %s\n", justFloats.length, justFloats.toString(), vals.toString() );
+    Out.format( "%i of %i values in %s are Integers\n", justInts.length, vals.length, vals.toString() );
+	
+	return SUCCESS;
+  }
+}
+```
+
+That demonstrates all the forms of list comprehension - as 'map', 'reduce' and 'filter' should be default member functions of any "Iterable", as all Iterables are Lists. 
+
+###Closing Thoughts
+The syntax and grammar proposed above are lacking in several specifics that I have been unable to decide on and do not have any proper idea of how they could be safely and properly implemented. These include marking blocks for automatic multi-processing, ternary operators and Perl-like postfix operations.
+
+As I have said quite a bit recently, comment, critique and discussion are welcomed!
