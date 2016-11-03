@@ -246,6 +246,9 @@ Object example_of_list_comprehension {
 
 That demonstrates all the forms of list comprehension - as 'map', 'reduce' and 'filter' should be default member functions of any "Iterable", as all Iterables are Lists. 
 
+####Notes
+The string constant given to the 'formatted output' function show my long history and familiarity with C. The actual proposal for formatted output strings will not look like that. The actual "insert item here" marker will likely take after how they look in C#, as one of the functions that Object will implement a "sane default" for is the "toString()" member function used above. In this manner there will be no need to encode a type in the specifier, as all Objects will have a method that converts them to a String that can then be simply interpolated into the output.
+
 ###Closing Thoughts
 The syntax and grammar proposed above are lacking in several specifics that I have been unable to decide on and do not have any proper idea of how they could be safely and properly implemented. These include marking blocks for automatic multi-processing, ternary operators and Perl-like postfix operations.
 
