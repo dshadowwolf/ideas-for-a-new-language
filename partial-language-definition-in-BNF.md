@@ -1,8 +1,8 @@
 ###Syntax Description
 ```
 compilation-unit: prologue object | object ;
-prologue: import | imports ;
-imports: import imports ;
+prologue: imports ;
+imports: import | import ',' imports ;
 import: IMPORT identifier FROM identifier AS identifier EOL ;
 object: object-header { object-body } ;
 object-header: OBJECT identifier | OBJECT identifier inheritance ;
@@ -16,10 +16,10 @@ members: member | members ;
 visibility: <currently undefined> ;
 storage-spec: <currently undefined> ;
 parameter-list: '('[any whitespace]')' |
-  '(' plist ')' ;
-plist: plist-item |
-  plist-item ',' plist ;
-plist-item: typespec identifier |
+  '(' param-list ')' ;
+param-list: param-list-item |
+  param-list-item ',' param-list ;
+param-list-item: typespec identifier |
   typespec identifer ASSIGN constant ;
 return-spec: typespec ;
 expressions: all-expr |
