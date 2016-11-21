@@ -16,10 +16,10 @@ members: member | members ;
 visibility: <currently undefined> ;
 storage-spec: <currently undefined> ;
 parameter-list: '('[any whitespace]')' |
-  '(' plist ')' ;
-plist: plist-item |
-  plist-item ',' plist ;
-plist-item: typespec identifier |
+  '(' param-list ')' ;
+param-list: param-list-item |
+  param-list-item ',' param-list ;
+param-list-item: typespec identifier |
   typespec identifer ASSIGN constant ;
 return-spec: typespec ;
 expressions: all-expr |
