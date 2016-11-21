@@ -1,8 +1,8 @@
 ###Syntax Description
 ```
 compilation-unit: prologue object | object ;
-prologue: import | imports ;
-imports: import imports ;
+prologue: imports ;
+imports: import | import ',' imports ;
 import: IMPORT identifier FROM identifier AS identifier EOL ;
 object: object-header { object-body } ;
 object-header: OBJECT identifier | OBJECT identifier inheritance ;
