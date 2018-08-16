@@ -40,10 +40,20 @@ Again, this syntax is purely for demonstrative purposes and will likely change a
 The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.
 
 Future Notes:
-  - Lambda Calculus ties into this idea, in that the functions should be, as much as possible, state free, almost black boxes as Alonso Church defined things
+   - Lambda Calculus ties into this idea, in that the functions should be, as much as possible, state free, almost black boxes as Alonso Church defined things
+    - In Lambda Calculus the following defines all boolean operations ('t' is the actual boolean true and 'f' the actual boolean false): 
+```
+	TRUE = λx.λy.x
+    FALSE = λx.λy.y 
+	IF = λb.λt.λf.b t f
+	AND = λab. IF a b FALSE
+    OR = λab. IF a TRUE b
+    NOT = λb.IF b FALSE TRUE 
+```
+  - The preceding Lambda Calculus is not needed in this language, as it defines primitive operations that the language itself will be defining internally. The example is to show what a raw, purely mathematical notation for computation - even for things as simple as base boolean operations - looks like.
   - Comparison functions should return a defined value for various sorts of options - a value for "didn't match" would be needed in the example
     - the switch function in the example above, if processed in a manner compliant with the standard C-like fallthrough, would result in a set of "didn't match" and functions, which might just be a set of return statements.
-  - A set of default operators for math, comparison, boolean operations and bit manipulation
+  - A set of default operators for math, comparison, boolean operations and bit manipulation - this should probably include something like the famous "ternary" operator and some means of saying "compose as a function" for allowing for functions to return functions. (ie: lambda functions)
   - Definite syntax for function and variable declaration and definition
   - Definite syntax for code blocks, function returns, etc...
   - Encapsulation, structured data - ie: objects, structs, enums, etc... all need some definition
