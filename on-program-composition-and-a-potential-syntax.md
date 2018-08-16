@@ -47,10 +47,10 @@ Concepts missing from the examples:
 
 Mistakes:
   1) Not single-token look-ahead
-    - single token look-ahead makes parsing much easier and, in some cases, faster
-	- allows for much, much simpler state tables and a smaller number of states overall
+     - single token look-ahead makes parsing much easier and, in some cases, faster
+	 - allows for much, much simpler state tables and a smaller number of states overall
   2) Not context-free
-    - a context free language has every construct meaning the exact same thing regardless of the context of it - ie: a function call is a function call where the examples given have function definitions only differentiated from function calls by having the types defined in the parameter list
-	- context free languages are much easier for programmers to understand
-	- they are also a lot easier to locate bugs in because of the "each construct means the same thing regardless of where it is found" nature.
+     - a context free language has every construct meaning the exact same thing regardless of the context of it - ie: a function call is a function call where the examples given have function definitions only differentiated from function calls by having the types defined in the parameter list
+	 - context free languages are much easier for programmers to understand
+	 - they are also a lot easier to locate bugs in because of the "each construct means the same thing regardless of where it is found" nature.
 	
