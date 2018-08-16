@@ -26,8 +26,9 @@ func f(x: character) : Array(character);
 
 f(x: character) = {
   switch(x, {
-  compare_item_fallthrough('a', { "blargh"; });
-  compare_item_fallthrough('b', { "foobar"; });
+  compare_item_fallthrough( x, 'a', { "blargh"; });
+  compare_item_fallthrough( x, 'b', { "foobar"; });
+  default_item( x, { "default!"; });
   );
 };
 
@@ -38,6 +39,17 @@ Again, this syntax is purely for demonstrative purposes and will likely change a
 
 The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.
 
+Future Notes:
+  - Lambda Calculus ties into this idea, in that the functions should be, as much as possible, state free, almost black boxes as Alonso Church defined things
+  - Comparison functions should return a defined value for various sorts of options - a value for "didn't match" would be needed in the example
+    - the switch function in the example above, if processed in a manner compliant with the standard C-like fallthrough, would result in a set of "didn't match" and functions, which might just be a set of return statements.
+  - A set of default operators for math, comparison, boolean operations and bit manipulation
+  - Definite syntax for function and variable declaration and definition
+  - Definite syntax for code blocks, function returns, etc...
+  - Encapsulation, structured data - ie: objects, structs, enums, etc... all need some definition
+  - Program entry point, namespaces, etc...
+  - Standard library
+  
 Concepts missing from the examples:
   1) Encapsulation/Objects
   2) Libraries/Namespaces
