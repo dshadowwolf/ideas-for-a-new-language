@@ -37,7 +37,51 @@ print_line("{}", f('a'));
 
 Again, this syntax is purely for demonstrative purposes and will likely change as this idea is explored further. For demonstrative purposes the curly braces mark "long chains of function calls" and is, effectively, used to demarcate no-parameter functions when used as a parameter. This, however, is also another example that suffers from being context sensitive instead of context free. It does, additionally, demonstrate that every piece is built of functions - and if each function is "provably correct" then, if the input is also true and correct - and the functions are used correctly - this means that the end result is also "provably correct". Additionally... if all the functions of each program are also added to the systems library of available functions it would become possible for users to write complete, complex and, most importantly, ***NEW*** programs just by linking the existing functions together with whatever the programs input data would be - and have it be, provided that no errors are made in using the functions the program would be "provably correct". (and done correctly the program would be robust against "garbage input")
 
-The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.
+A better syntax, borrowing a couple ideas from the Rust programming language, including a final declaration that nearly everything in the language is an expression, is possible. In Rust itself, the square function from the examples, would be:
+```rust
+fn square(x: u64) -> u64 {
+  x * x
+}
+```
+There is no "return" statement in Rust, the value of the last expression is the return value of the function. By either making it such that we have the "arrow" ``->`` operator replaced by a "store" ``=`` (or perhaps ``:=``) we can differentiate a function definition from a function declaration. In addition, though it tends to make code more verbose, the declaration of a variable should be separate from the definition of its value. These changes, applied to the first given example, lead to a cleaner design with a lack of context sensitive pieces, as in:
+```
+func f(x: integer) -> integer;
+func sqare(x: integer) -> integer;
+const mult : integer;
+
+mult = 100;
+
+func f(x: integer) = square(x) * mult;
+func square(x: integer) = x * x;
+
+print_line("square of 2 times 100 is {}", f(2));
+```
+It might also be better, in fact, to declare that all blocks of code must be wrapped in curly-braces. Not, strictly, for the compiler, but also for the programmer - by having all blocks of code cleanly delineated tracking which pieces of code go together is made much easier. This would, for example, result in people not making a possible mistakes that are somewhat common to see in new programmers in the C family of languages, where a block of code in curly braces is, in some cases, treated as equivalent to a single expression or statement, such that:
+```c
+if( x == y ) do_z();
+```
+is seen as completely equal to:
+```c
+if( x == y ) { do_z(); }
+```
+and this does cause issues at times, as some programmers not used to this "feature" of the C family of languages will try adding to the code for the if-block and finding that it runs
+regardless, because they did not include the braces. By declaring that the braces are needed to wrap any actual code we also wind up with a means of declaring code as a form of data. To that end, and making the syntax even more regular, we come up with the following:
+```
+func f(x: integer) -> integer;
+func sqare(x: integer) -> integer;
+var mult -> const integer;
+
+var mult = { 100 };
+
+func f(x: integer) = { square(x) * mult };
+func square(x: integer) = { x * x };
+
+{ print_line("square of 2 times 100 is {}", f(2)) };
+```
+Note that the ``mult`` variable is assigned a value as if that value is a chunk of code. Technically this is actually true - the chunk of code is a simple expression that evaluates to the constant value 100. Other than that the code is regularized and any context sensitive parts are actually given strict context markers such that the language itself still can be classified as "context free". This regularization makes the language easier for both humans and computers to properly parse correctly and should make it more difficult for people to write incorrect code that will compile but generate incorrect output.
+
+### Older Notes and Information
+~~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~~
 
 Future Notes:
    - Lambda Calculus ties into this idea, in that the functions should be, as much as possible, state free, almost black boxes as Alonso Church defined things
