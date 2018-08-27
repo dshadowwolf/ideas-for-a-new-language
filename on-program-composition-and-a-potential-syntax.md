@@ -118,6 +118,32 @@ define newLocation: point = location.addOther( (-5.25, 25, -16) );
 ```
 All that would need to be added is some way of denoting protection to the encapsulated data and perhaps a means of denoting a function as a type...
 
+With the full redesign that has occurred, the simple fact is that there is no "assignment" happening - a "defined and typed name" (``define x: double;``) is actually "associated" with a value - or, alternatively, a "value" is associated with the "defined and typed name". This might seem like a bit of nit-picking pedantry, but in terms of thought processes it is something that programmers should have in mind, so rather than using an "assignment operator" (``=`` in C derived languages, ``:=`` in the original operators proposal for this language and in Pascal descended languages) this difference should be made clear with an "association operator", just as parameter list definitions are "applied as extra context to the scope of a function body" by the "arrow operator" (``->``). I was at my wits end when Abastro on Discord suggested using ``<->``. This double-arrow immediately appealed to me, as it has the duality of the actual "association" between the name and the value, and it isn't used in any current, modern language that I know of.
+
+Taking this into account and applying it to the previous examples of the proposed syntax, we end up with the following for the "raw" example:
+```
+define square: mutable int <-> (x: integer) -> { x * x };
+define f: mutable int <-> (x: integer) -> { square(x) * mult };
+define mult: int <-> 100;
+
+/* for illustrative purposes, definition of program entry point has not been decided on */
+print_line("square of 2 times 100 is {}", f(2));
+```
+Yes, the "association" can also associate a description of the data as well as data or a function, so we wind up with the following for the "structured data" and "structured data with function" examples:
+```
+define point: structure <-> ( x: double, y: double, z: double );
+define location: point <-> ( 10.00, -25.42, 15.33 );
+```
+And also:
+```
+define point: structure <-> ( x: double, y: double, z: double,
+                            addOther: mutable point <-> (other: point) -> {
+							( x + other.x, y + other.y, z + other.z )
+							} );
+define location: point <-> ( 10.00, -25.42, 15.33 );
+define newLocation: point <-> location.addOther( (-5.25, 25, -16) );
+```
+
 ### Older Notes and Information
 ~~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~~
 
