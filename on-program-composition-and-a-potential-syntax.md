@@ -110,7 +110,7 @@ define location: point = ( 10.00, -25.42, 15.33 );
 And, as the language makes no distinction between code and data, we can have the start of an object system:
 ```
 define point: structure = ( x: double, y: double, z: double,
-                            addOther: point = (other: point) -> {
+                            addOther: mutable point = (other: point) -> {
 							( x + other.x, y + other.y, z + other.z )
 							} );
 define location: point = ( 10.00, -25.42, 15.33 );
