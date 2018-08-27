@@ -1,3 +1,50 @@
+### Redesign/New Thoughts
+The items in the [Basics](#Basics_of_any_programming_language) section apply, to a degree, but because of something of a revolution/evolution in the design of the language, there are quite a few changed in what is needed for the language. For instance, thanks to how the conceptualization of the proposed language has changed, there is no longer an "assignment" for providing values to variables - you instead "associate" a defined name with a given value. To help enforce this conceptual difference in the programmers mind, calling this an "assignment" and using a classic "assignment" operator is not correct.
+
+For this new, conceptual, design we replace the "assignment" operator with the "associate" operator and add an operator that functions similar to the "apply" of some functional languages. This "apply" operator, however, applies a "context" to a function - basically associating a parameter list (declaration, not actual values) with the code of the function - giving some extra state and context to the somewhat closed scope of the function itself. It remains undecided, at this time if it will also be used as part of the lanugage paradigm for function calls - ie: applying the actual parameter values to the defined function and getting a result.
+
+This leads to the following set of proposed operators - 28 in total, grouped into 4 overall groupings and further subdivided, where needed, into more specific functional blocks. As can be seen, there were a few changes/additions and the "Boolean Not" operator also does double duty as the binary math NOT/Invert operator. The three items of block 4 are complete language constructs - with one of them a variant of another - that are commonly called "operators" but take a more complex form than any of the others. There are some other pieces that might be considered "Operators", in a way, but don't actually act as operators in form.
+
+### New Proposed operators:
+1. Math Operators
+   1. Classic Arithmetic Operators
+      1. Addition:             +
+	  2. Subtraction:          -
+	  3. Multiplication:       *
+	  4. Division:             /
+	  5. Modulo:               %
+   2. Bitwise/Binary Operators
+      1. AND:                  &
+	  2. OR:                   |
+	  3. NOT:                  !
+	  4. XOR:                  ~
+      5. Shift Left:           <<
+      6. Shift Right:          >>
+      7. Roll Left:            <<<
+      8. Roll Right:           >>>
+2. Boolean/Comparison Operators
+   1. Basic Operators
+      1. Equality:             =
+      2. Less Than:            <
+	  3. Greater Than:         >
+	  4. Inequality:           !=
+   2. Extended/Compound
+      1. Less-Than-Or-Equal:   <=
+	  2. Greater-Than-Equal:   >=
+	  3. Identity/Identical:   ==
+   3. Combining/Alternation/Other
+      1. AND:                  &&
+	  2. OR:                   ||
+	  3. NOT:                  !	  
+3. Special Operators
+   1. Associate:               <->
+   2. Apply:                   ->
+4. Non-Operator "linguistic operators"
+   1. Ternary:                 <expression>?<value if true>:<value if false>
+   2. Shortcut Ternary:        <expression>?:<value if false>
+   3. Range:                   <value>..<value>
+
+### Original Thoughts/Design follows
 ###Basics of any programming language
 1. Math operations
   * At its core a computer does exactly what the name implies - computes. So every language needs a basic set of math operations
