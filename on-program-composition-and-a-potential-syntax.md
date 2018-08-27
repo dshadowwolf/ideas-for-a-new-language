@@ -86,7 +86,7 @@ In trying to work out a means of defining "structured data" - think the "struct"
 
 After much thought on this - while working on the issue of how to present the structured data to the compiler and also allow for it to take functions as members - what has come out is not a means of defining structured data, though I am working on ideas for this, but actually a system in which lambda functions are realized and the artificial separation between functions and data is removed.
 
-While this new language definition removes some of the regularity of the old one - most notably making it so that curly braces are once more only used to denote blocks of code - it also, to me (at the least), makes the language more expressive. That this also removes some features that might have led this to becoming a [http://www.catb.org/jargon/html/B/bondage-and-discipline-language.html](Bondage and Discipline Language) is another relatively major benefit.
+While this new language definition removes some of the regularity of the old one - most notably making it so that curly braces are once more only used to denote blocks of code - it also, to me (at the least), makes the language more expressive. That this also removes some features that might have led this to becoming a [Bondage and Discipline Language[(http://www.catb.org/jargon/html/B/bondage-and-discipline-language.html) is another relatively major benefit.
 
 An example of this redesign, still lacking any thoughts on the way of defining the programs entry-point or structured data:
 ```
