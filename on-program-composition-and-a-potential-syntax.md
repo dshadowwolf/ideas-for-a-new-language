@@ -1,3 +1,4 @@
+### Original Thoughts
 One major idea I've come across that seems to be both the way it should be and a bit of a wank is the idea of a programming language where you define the type and value transitions in a "provably correct" manner, then define the program as a combination of those type and value transitions. I call this "a bit of a wank" because there are sections of programs where the actions are not because of type or value transitions - such a thing is not even applicable in "business" applications. But the idea that you define each "simple" chunk of a program as a simple block that can be joined with others to "compose" a program - that is a great idea and leads to what has been termed "Higher Order Software".
 
 Earlier today, as I floated on the edge of sleep just after waking up I hit upon the truth that mathematical notation of functions is something that is well understood - almost everyone has been exposed to the idea of ``f(x) = x * x`` at some point in their schooling. Expanding that to something useful for programming is not a simple task, but gives a means of defining the different operations, transitions between types and values and could even be used to define branching and comparison.
@@ -69,7 +70,7 @@ regardless, because they did not include the braces. By declaring that the brace
 ```
 func f(x: integer) -> integer;
 func sqare(x: integer) -> integer;
-var mult -> const integer;
+var mult -> integer;
 
 var mult = { 100 };
 
@@ -79,6 +80,40 @@ func square(x: integer) = { x * x };
 { print_line("square of 2 times 100 is {}", f(2)) };
 ```
 Note that the ``mult`` variable is assigned a value as if that value is a chunk of code. Technically this is actually true - the chunk of code is a simple expression that evaluates to the constant value 100. Other than that the code is regularized and any context sensitive parts are actually given strict context markers such that the language itself still can be classified as "context free". This regularization makes the language easier for both humans and computers to properly parse correctly and should make it more difficult for people to write incorrect code that will compile but generate incorrect output.
+
+### New Thoughts
+In trying to work out a means of defining "structured data" - think the "struct" of C or the classes of object oriented languages - and seeking some help from a mathematician it has come to my awareness that I left quite a bit of context dependency in the language and was still carrying over an artificial separation between functions and data that should not exist in a language in which functions and data should be interchangable.
+
+After much thought on this - while working on the issue of how to present the structured data to the compiler and also allow for it to take functions as members - what has come out is not a means of defining structured data, though I am working on ideas for this, but actually a system in which lambda functions are realized and the artificial separation between functions and data is removed.
+
+While this new language definition removes some of the regularity of the old one - most notably making it so that curly braces are once more only used to denote blocks of code - it also, to me (at the least), makes the language more expressive. That this also removes some features that might have led this to becoming a [http://www.catb.org/jargon/html/B/bondage-and-discipline-language.html](Bondage and Discipline Language) is another relatively major benefit.
+
+An example of this redesign, still lacking any thoughts on the way of defining the programs entry-point or structured data:
+```
+define square: mutable int = (x: integer) -> { x * x };
+define f: mutable int = (x: integer) -> { square(x) * mult };
+define mult: int = 100;
+
+/* for illustrative purposes, definition of program entry point has not been decided on */
+print_line("square of 2 times 100 is {}", f(2));
+```
+
+As can be seen, this uses a single keyword - ``define`` - to tell the compiler to reserve the following token as a "symbol" and has a unified syntax for defining data and code, with all functions now being lambda functions that are directly associated with a "defined" name. It also introduces the concept of the ``mutable`` keyword, which is needed as otherwise every name is defined to be associated with a constant value. The use of ``mutable`` as part of defining a function is done as it can be assumed that a compiler, having been told that anything lacking the keyword is constant, could take the result of the function being called the first time as the only result it will ever produce as part of an optimization and generate code that elides later calls, with possibly different parameters, because it can replace it with the (assumed) fixed value of the original call.
+
+And it might, still, be possible to use the structured data definition that I had been working on prior to being notified of what I had done and realizing I had to alter the language syntax and grammar accordingly. This would require the parser to do some tracking, but would make a Lambda Functions definition a combination of the definition of a data structure and its association, via the arrow operator (``->``) with a block of code. Practically this could make the arrow operator actually translate as "applied to"...
+
+By that definition, and defining a "function call" as a "postfix expression" where the operator is a "structured data initializer" we could, potentially, have structured data defined as:
+```
+define point: structure = ( x: double, y: double, z: double );
+define location: point = ( 10.00, -25.42, 15.33 );
+```
+And, as the language makes no distinction between code and data, we can have the start of an object system:
+```
+define point: structure = ( x: double, y: double, z: double, addOther: point = (other: point) -> { ( x + other.x, y + other.y, z + other.z ) } );
+define location: point = ( 10.00, -25.42, 15.33 );
+define newLocation: point = location.addOther( (-5.25, 25, -16) );
+```
+All that would need to be added is some way of denoting protection to the encapsulated data and perhaps a means of denoting a function as a type...
 
 ### Older Notes and Information
 ~~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~~
