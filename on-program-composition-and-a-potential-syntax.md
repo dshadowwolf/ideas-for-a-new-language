@@ -143,6 +143,70 @@ define point: structure <-> ( x: double, y: double, z: double,
 define location: point <-> ( 10.00, -25.42, 15.33 );
 define newLocation: point <-> location.addOther( (-5.25, 25, -16) );
 ```
+### Language Concepts and the humble Function Call
+It seems that the current structure of the function call action - something that was one of the key, defining pieces that led me down the road to the current form of Turned C - is now in need of a replacement as it does not fit with the concept of the language as the language is defined. When a function is called, it is not "passed arguments" - they are bound to typed names that are part of the functions "execution context" or "scope". That means that the current form of the function call in Turned C presents the wrong picture of what is happening to the programmer.
+
+Then there is the fact that we have, effectively, a need for two different forms of function call - one that needs to be evaluated immediately, without needing an evaluation of the name storing its response and one that can have its execution deferred until the value is actually referenced. From this we can see the need for two new operators, both related to the "associate" operator but what is not obvious is that we also need an operator for a "nominal association" since the current "positional" setup for defining values for structured data is highly positional and does not fit within the growing "there is nothing implicit, everything is explicitly shown" nature of the language.
+
+Using the "fat double arrow" (``<=>``) for immediate execution, the "blunted fat double arrow" (``[=]``) for deferred execution and the "left pointing arrow" (``<-``) to apply a "nominal association" we wind up with the standard examples as:
+```
+define square: mutable int <-> (i: integer) -> { i * i };
+define f: mutable int <-> (x: integer) -> { (i <- x) <=> square * mult };
+define mult: int <-> 100;
+
+/* for illustrative purposes, definition of program entry point has not been decided on */
+(format <- "square of 2 times 100 is {}", args <- [(x <- 2) <=> f]) <=> print_line;
+```
+and:
+```
+define point: structure <-> ( x: double, y: double, z: double);
+define location: point <-> ( x <- 10.00, y <- 25.42, z <- 15.33 );
+```
+I have not used the "Object" example here as there are some changes in that area, detailed in the next section.
+   
+### On Object Oriented Programming and "Turned C"
+The current form of "Turned C" is a functional language, if not for the fact that it makes no differentiation between code and data then for the other features not commonly found outside of functional languages. Let us consider the actual declaration and definition of a function:
+```
+define square: mutable int <-> (x: int) -> { x * x }
+```
+This consists of 4 parts and, outside of the effective code of the function itself, 2 operators. The breakdown of this code is:
+```
+define square: mutable int <-> (x: int) -> { x * x }
+      ^           ^         ^     ^     ^      ^
+	  |           |         |     |     |      |
+	  |           |         |     |     |      +------ function body closure
+	  |           |         |     |     |
+	  |           |         |     |     +---- "inject" operator
+	  |           |         |     +---- "parameter list" - a "structured data definition" that
+	  |           |         |           is, via the "inject" operator, added to the execution context
+	  |           |         |           of the "function body closure"
+	  |           |         |	  
+	  |           |         +---- "associate operator"
+	  |           |
+	  |           +---- type and type modifier declaration
+	  |
+	  +---- name definition
+```
+As can be seen, it begins with the ``define`` keyword followed by the name being defined. (Using this alone is not legal in the language as it is currently defined, but as the language is not completely defined, this may change.) Following this is a colon - this is not an operator, per-se, but should be treated as one - and a set of keywords and, optionally, a type-name. This constitutes a "complete type definition" and the end of the data the compiler needs to reserve the name properly in the symbol table.
+Following the opening part is the "associate operator", which creates an association between a given "typed name" and a value. That is followed by a "structured data initializer" and then the "inject" operator, which marks this as a lambda function definition. The "structured data initializer" gives a set of "typed names" - they will have values attached at the time of the function call - that are "injected" into the execution context of the last item in our example function. Said "final item" is a code-block or "closure" (the "function body closure", in this case) that contains the code executed at function call time.
+
+I hope the preceding example shows exactly why "Turned C" is a Functional language, rather than Imperative, Procedural or Object Oriented at this point in its design. In a number of the other documents I have written about my thoughts on programming languages I have talked about making the language multi-paradigm. In truth the current direction of Turned C is towards a mix of procedural and functional paradigms, though, as the name of this section hints, work is being done to define something approaching a good object oriented - or even just plain object - system for the language.
+
+On that front I noted, earlier, that Structure Data could include functions as they are just another form of data and not treated any different (linguistically if not on the machine level) than a string or number would be. Extending this out to a full object oriented system in the manner that most expect - with data hiding, overloaded functions, singleton/static members, etc... - would require changes to a number of core concepts of the language in such a way that it could introduce confusion at either the compiler implementation level or the user level. So what must be done is a careful evaluation of the various features that do not, already, fit with the language and whether they are needed for the objects defined in Turned C to be as effective and powerful as objects in other languages.
+
+This leads to the conclusion that we do not add the features that require deep language changes, but instead add a few ideas to the way the closure scope/function execution concept are handled. One of these is the concept of a "this" - which is, actually, already implicitely present though not fully defined for its use in this case and the change is to actually add an explicit 'this' type pointer to the scope/context to help with clarity in some places where it might not, otherwise, exist. Another is the addition of a set of keywords to define an items "protection domain" - this would allow for data hiding - and a signifying name for the constructor and destructor of an object.
+
+So, as a suggestion for the syntax:
+```
+define point: structure <-> ( x: private constructable double, y: private constructable double, z: private constructable double,
+                            addOther: mutable public point <-> (other: point) -> {
+							( x <- this.x + () <=> other.getX, y <- this.y + () <=> other.getY, z <- this.z + () <=> other.getZ )
+							},
+							getX: public int <-> () -> { this.x }, getY: public int <-> () -> { this.y }, getZ: public int <-> () -> { this.z });
+define location: point <-> ( x <- 10.00, y <- -25.42, z <- 15.33 );
+define newLocation: point <-> (x <- -5.25, y <- 25, z <- -16) [=] location.addOther;
+```
+Note that we do not allow, specifically, for a constructor in this but instead mark the members that are to be set as part of "construction" as being such, even if they are otherwise private. This saves on boilerplate code and programmer time while not breaking the concepts of the language. Also note that in the above example I have used the "lazy evaluating" function call syntax, which means that, without the addition of something that actually references the value of ``newLocation``, the function call specified will not take place, though the execution context is immediately bound.
 
 ### Older Notes and Information
 ~~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~~
