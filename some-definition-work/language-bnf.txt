@@ -1,0 +1,40 @@
+name-start-char: [a-zA-Z0-9_]
+name-chars: [a-zA-Z0-9_\-]
+numeric-constant: integer | float
+integer-limited-octet: 0x[:xdigit:]{1,2} | RANGE(0, 255) | 0b[01]{1,8}
+escape-char: ["\\%nrt]
+string-escape: \ escape-char | \x[:xdigit:]{2} | \o[0-7]{3}
+character-constant: ' [:print:] ' | integer-limited-octet
+string-constant: " [[:print:]|string-escape] "
+integer: [0-9]+ | 0x[:hexdigit:] | 0b[01]+ | integer [U|L]
+float: [0-9]+ . [0-9]+ | [0-9] + . [F] | . [0-9]+ [F|D]
+
+identifier: name-start-char[name-chars]*
+constant-value: numeric-constant | character-constant | string-constant | identifier | structured-data
+typename: INT | FLOAT | STRING | ... -- this goes on as it can also include any identifier defined as a typename - user-defined types are, at this time, undefined
+
+lhs: identifier | constant
+rhs: lhs | evaluate-statement | constant
+operator: MATH-OPERATOR | BOOLEAN-OPERATOR | ... -- full operator list undecided
+expression: lhs operator rhs
+full-expression: identifier APPLY-TO expression
+flow-control: !!!UNDEFINED!!! -- full flow-control semantics have not been decided on
+apply-statement: identifier APPLY-TO [ code-block | constant ]
+evaluate-statement: structured-data evaluate-operator identifier
+statement: apply-statement ; | flow-control | full-expression ; | evaluate-statement ;
+
+name-type-pair: identifier : typename
+code-block: { statement*[ expression ;?]? } | { constant ;? } | { expression ;? }
+structured-data: ( name-type-pair[, name-type-pair]* )
+base-type-specification: MUTABLE? typename | MUTABLE? STRUCTURE
+data-definition: constant-value | structured-data | structured-data APPLY-TO code-block
+
+module-import: !!!UNDEFINED!!! -- module system and setup has not been decided on
+meta-statement: !!!UNDEFINED!!! -- for syntactic sugar
+
+name-definition: DEFINE identifier: base-type-specification ;
+  | DEFINE identifier: base-type-specification ASSOCIATE data-definition ;
+  
+top-statement: module-import | meta-statement | name-definition
+
+compilation-unit: top-statement*
