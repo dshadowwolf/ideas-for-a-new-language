@@ -258,9 +258,9 @@ function x() ...
 ```
 
 For the current suggestion there would be visibility domains including, but not limited to, the following:
-  - class
+  - ``class``
     - similar to the classic "private" but kept separate to allow for more granularity in the system
-  - subclass
+  - ``subclass``
     - similar to classic "protected" but separate to allow for extra granularity to be added and controlled by the scope
   - ``public``
     - classical meaning - specific semantics of how wide this is detailed by the scope
@@ -268,15 +268,17 @@ For the current suggestion there would be visibility domains including, but not 
     - classical meanings, specifically for places where it is wider-than-class visible, but not ``world`` - eg: ``package private`` in Java would be domain ``private`` and scope ``package-only``
 
 For scope, at this point, we have the following suggested:
-  - package-only
+  - ``class``
+    - included for completeness and to allow for a true mirror of the semantics of the classic ``private`` visibility modifier in other languages
+  - ``package-only``
     - just the containing package, not even sub-packages (better name needed!)
-  - package
+  - ``package``
     - this package and all sub-packages
   - ``module-only`` and ``module``
     - module-level variation of ``package-only`` and ``package``
-  - assembly
+  - ``assembly``
     - the containing assembly, but not the world
-  - world
+  - ``world``
     - everything
 	
 ### Older Notes and Information
