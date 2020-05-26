@@ -228,14 +228,14 @@ switch( <test value>, (
 ))
 ```
 
-With this idea we add a new operator - ``\[\[ ... \]\]`` - which defines a predicate lambda (takes a single input - provided to the lambda as ``it`` - and returning a boolean value). We then hand the function-like keyword an input value and a list of 2-tuples, with the result value being inferred. The 2-tuples are comprised of a predicate and an expression/function that returns the result value. All branches of a ``switch`` must result in the same value type. In the case of the pre-defined ``DEFAULT`` predicate there is special handling as it only matches if no other predicates match and must be a separate entry.
+With this idea we add a new operator - ``[[ ... ]]`` - which defines a predicate lambda (takes a single input - provided to the lambda as ``it`` - and returning a boolean value). We then hand the function-like keyword an input value and a list of 2-tuples, with the result value being inferred. The 2-tuples are comprised of a predicate and an expression/function that returns the result value. All branches of a ``switch`` must result in the same value type. In the case of the pre-defined ``DEFAULT`` predicate there is special handling as it only matches if no other predicates match and must be a separate entry.
 
 Fall-through is not possible with this setup, though properly designed predicates can get around this (to a degree). As you can use indirect call mechanics with both members of the tuple, sharing code between different entries is also possible in that manner.
 
 ### Truth, "Truthiness" and Boolean Conversion
 While discussing the ``switch`` construct change that has recently been added to this document - and as noted in a comment in the example - the concept of a "truth" or "truthiness" operator arose. While an implicit translation to Boolean for any value has a historical basis, the fact remains that a "truth" operator in Turned-C would, necessarily, only be able to work on actual boolean values and the principle of least surprise means that an implicit conversion of other types to boolean is not a possible feature. Therefore a better solution is needed - one that would require any class/object/type needing and/or wanting it to define a specific name with a return-type of Boolean whose sole purpose is to return a boolean True or False based on the current value of that item. This would then be called by the "truth"/"truthiness" operator, in effect creating a unary expression for testing a type for boolean True/False.
 
-At this time there are no firm ideas or proposals for the operator or for the specific name for this ``special method``.
+At this time there are no firm ideas or proposals for the operator or for the specific name for this "special method".
 
 ### Packages, Modules, Namespaces, etc...
 ***SECTION NOT COMPLETE***
