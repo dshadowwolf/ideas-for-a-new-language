@@ -215,8 +215,10 @@ But, as often happens, my mind was working overtime as I tried to sleep one nigh
 
 The restriction of the weak binding only being at the original location is, to an extent, artificial. However, in deference to how things often work out, this limitation is in place - otherwise you might have some really, really nasty side-effects happening that would make programs nearly impossible to properly debug or harden against attack.
 
+* Note that this setup has been called "closure binding" by a friend that reviewed the idea before and after this section was originally written.
+
 ### Older Notes and Information
-~~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~~
+~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~
 
 Future Notes:
    - Lambda Calculus ties into this idea, in that the functions should be, as much as possible, state free, almost black boxes as Alonso Church defined things
