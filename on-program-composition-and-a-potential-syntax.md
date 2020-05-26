@@ -224,10 +224,10 @@ Future Notes:
    - Lambda Calculus ties into this idea, in that the functions should be, as much as possible, state free, almost black boxes as Alonso Church defined things
     - In Lambda Calculus the following defines all boolean operations ('t' is the actual boolean true and 'f' the actual boolean false): 
 ```
-	TRUE = λx.λy.x
+    TRUE = λx.λy.x
     FALSE = λx.λy.y 
-	IF = λb.λt.λf.b t f
-	AND = λab. IF a b FALSE
+    IF = λb.λt.λf.b t f
+    AND = λab. IF a b FALSE
     OR = λab. IF a TRUE b
     NOT = λb.IF b FALSE TRUE 
 ```
