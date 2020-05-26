@@ -217,6 +217,21 @@ The restriction of the weak binding only being at the original location is, to a
 
 * Note that this setup has been called "closure binding" by a friend that reviewed the idea before and after this section was originally written.
 
+### On "Switch-Case" and a New Direction
+Early on in this document I cover a possible setup for the venerable switch-case control structure. The design does not, really, meet the requirements of Turned-C and the structure of it, overall, is unpolished. Compare the original to the following idea:
+```
+switch( <test value>, (
+  ( [[ DEFAULT ]], { 0  }), // DEFAULT is a built-in predicate that matches only if no other predicates match
+  ( [[ it == 0 ]], { 0  }), // no fall-through in this case
+  ( [[ it < 0  ]], { -1 }), // expressions and blocks of code can be used, with the parameter "it" acting as an input parameter for the implied lambda
+  ( [[ it > 0  ]], { 1  })  // might want to think about adding an operator for "truth" and/or "truthiness" to make such things explicit rather than implicit, but...
+))
+```
+
+With this idea we add a new operator - ``\[\[ ... \]\]`` - which defines a predicate lambda (takes a single input - provided to the lambda as ``it`` - and returning a boolean value). We then hand the function-like keyword an input value and a list of 2-tuples, with the result value being inferred. The 2-tuples are comprised of a predicate and an expression/function that returns the result value. All branches of a ``switch`` must result in the same value type. In the case of the pre-defined ``DEFAULT`` predicate there is special handling as it only matches if no other predicates match and must be a separate entry.
+
+Fall-through is not possible with this setup, though properly designed predicates can get around this (to a degree). As you can use indirect call mechanics with both members of the tuple, sharing code between different entries is also possible in that manner.
+
 ### Older Notes and Information
 ~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~
 
