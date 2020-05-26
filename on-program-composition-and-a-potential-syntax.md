@@ -232,6 +232,53 @@ With this idea we add a new operator - ``\[\[ ... \]\]`` - which defines a predi
 
 Fall-through is not possible with this setup, though properly designed predicates can get around this (to a degree). As you can use indirect call mechanics with both members of the tuple, sharing code between different entries is also possible in that manner.
 
+### Truth, "Truthiness" and Boolean Conversion
+While discussing the ``switch`` construct change that has recently been added to this document - and as noted in a comment in the example - the concept of a "truth" or "truthiness" operator arose. While an implicit translation to Boolean for any value has a historical basis, the fact remains that a "truth" operator in Turned-C would, necessarily, only be able to work on actual boolean values and the principle of least surprise means that an implicit conversion of other types to boolean is not a possible feature. Therefore a better solution is needed - one that would require any class/object/type needing and/or wanting it to define a specific name with a return-type of Boolean whose sole purpose is to return a boolean True or False based on the current value of that item. This would then be called by the "truth"/"truthiness" operator, in effect creating a unary expression for testing a type for boolean True/False.
+
+At this time there are no firm ideas or proposals for the operator or for the specific name for this ``special method``.
+
+### Packages, Modules, Namespaces, etc...
+***SECTION NOT COMPLETE***
+#### Package/Namespace/Module Import and/or Inclusion
+With any third generation or better language the standard library it comes with is a major draw. Along with that library is usually a means of organizing code and allowing for specifically referencing parts of the standard library and any others that might be installed on the system, as well as those defined by programmers for the projects at hand.
+
+One suggestion for the import/inclusion of modules from outside the immediate package is as follows:
+```
+using <module>; // imports everything
+using <class> from <module>;
+using <class> from <module> as <alias>;
+```
+This suggestion is something of a cross between that used by Javascript and the form used by C# (according to the person that suggested it). This setup is actually obvious and makes quite a lot of sense, overall, so alternate proposals, while still welcome, are not really needed.
+
+#### Visibility and Encapsulation
+Current rough concept/suggestion:
+```
+[visibility: subclass, scope: module] 
+function x() ...
+```
+
+For the current suggestion there would be visibility domains including, but not limited to, the following:
+  - class
+    - similar to the classic "private" but kept separate to allow for more granularity in the system
+  - subclass
+    - similar to classic "protected" but separate to allow for extra granularity to be added and controlled by the scope
+  - ``public``
+    - classical meaning - specific semantics of how wide this is detailed by the scope
+  - ``private`` and ``protected``
+    - classical meanings, specifically for places where it is wider-than-class visible, but not ``world`` - eg: ``package private`` in Java would be domain ``private`` and scope ``package-only``
+
+For scope, at this point, we have the following suggested:
+  - package-only
+    - just the containing package, not even sub-packages (better name needed!)
+  - package
+    - this package and all sub-packages
+  - ``module-only`` and ``module``
+    - module-level variation of ``package-only`` and ``package``
+  - assembly
+    - the containing assembly, but not the world
+  - world
+    - everything
+	
 ### Older Notes and Information
 ~~The things lacking from these examples and the problems they have (not context free, requiring more than one token of look-ahead, etc...) are because this is still a quite new idea for me and I have no firm idea how to actually implement it as far as the syntax and various rules go.~~
 
