@@ -1,4 +1,4 @@
-#This is not meant to be a true high-level language
+# This is not meant to be a true high-level language
 Rather than being a high-level language as has been discussed by many computer scientists over the years - dealing with transformations of types and allowing the compiler to choose which of the available transformations to apply - I have focused my thoughts on ways existing languages can be improved to provide more functionality and to allow the programmer to better express the solution.
 
 Hence this is what you might call a "mid-level" language. It concerns itself with telling the computer how to do things in a precise manner and leaving the reings, mostly, in the hands of the programmer. I cannot claim that this is a good choice or even a well reasoned one - all I can claim is that it was made because I have much more experience at that level and have given things at that level a lot more thought than I have for any other level of programming.
@@ -6,15 +6,15 @@ Hence this is what you might call a "mid-level" language. It concerns itself wit
 These files - this README and the other files that I am the original author of - also contain some extraneous thoughts on how things might be done where I did not have a concrete concept of the solution. Many of those deal with making the language more generic and giving much of the actual specificity of the language over to the programmer so that they can better express their ideas and solutions without any overriding artificial constraints other than the base concept of the language being built around encapsulated chunks of function and data - Objects.
 
 # The rest of it
-###Blargh!
+### Blargh!
 The documents here are the basic notes on ideas I've had over the years about ways that a programming language can be defined such that it allows the programmer the most freedom and provides facilities for doing things that might otherwise be extremely hard to do in other languages. The resulting language will also, as the ideas solidify and get written up, be designed in such a way as to take advantage of modern computer facilities, such as multiple cores and process offloading onto specialized processors such as GPU's.
 
 If you've got any ideas for improving what is here, write it up and send a pull request. Have written some code implementing parts of this? Put it into your copy of the repo and send a pull request. If I don't accept, I will try to give a cogent and well reasoned response as to why. (And... at this point the implementation language isn't defined, but I'm hoping for it to be in a reasonably portable and maintainable language that I have good knowledge of - so C would be a decent choice)
 
-####Note:
+#### Note:
 I am not claiming to have all the answers. Large parts of this specification will likely be written by others - those same large parts that are not covered in any file with my name on it as the originator - because I have no idea what the best choice for a given part of the language might be.
 
-###Ideas for a new programming language to address historical issues of languages and the requirements of the modern computer.
+### Ideas for a new programming language to address historical issues of languages and the requirements of the modern computer.
 
 1. Full module system with distinct namespaces
   * Modules have a name that fits within a global namespace for lookup
