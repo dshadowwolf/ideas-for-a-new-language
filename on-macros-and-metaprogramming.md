@@ -134,5 +134,10 @@ define match_macro : macro <-> (subject: node, arms...) -> {
 Take everything within this section as provisional and barely more than a rough suggestion -- this is the beginning of a thought of how to provide most system primitives as macros to make the language look a touch more "classical" than the existing "everything that isn't an operator or keyword is a function provided by the Turned-C standard library" definition.
 
 Note 1) There _must_ be a limit of some sort to the depth of the recursion -- what this limit is is TBD, but exceeding it should result in an error and compilation halting.
+  - A safe and sensible solution might be to limit _all_ structured data to have no more than 1024 members at any given level - this would, of course, apply explicitly to var-args lists as well, capping their length at `1024 - number-of-preceding-arguments`
 
 Note 2) The `args.count`/`args.head`/`args.tail` API is a rough sketch of an idea and the base name -- be it `args` or `arms` -- is taken from the "name" of the item given in the `structured definition` that has the `variadic` operator attached to it. These are not guaranteed to last for even the lifetime of this document as the idea behind things is iterated on and work done to make sure that things properly "meld" with the rest of the language. (it would not do for anything to do with such a core feature as the macro system to have bits that feel tacked on and the var-args syntax can actually extend beyond just macros)
+
+Note 3) The `head` and `tail` accessors for the "list of nodes" is also provisional, but is solid enough that it may survive. This is because it is simple, robust and doesn't require any real work to have function properly.
+
+Note 4) While the preliminary proposed sketch for `match_macro` may look like its all set to "wander off into a Null Pointer Dereference" the truth is that when `args` has nothing for `tail` (and hence `subject` is exhausted as well) the final call will arrive with an "empty list" -- triggering the `[[ arms.count == 0 ]] ` alternation that returns an "empty list".
