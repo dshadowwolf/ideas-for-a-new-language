@@ -1,15 +1,15 @@
 Turned-C is built as a minimalist toolkit where most language features are implemented as functions within the language itself. However, a small set of Keywords is required to define the irreducible "Physical Laws" of a program. These are categorized by their impact on the compiler and the machine:
 
    1. annotations: Metadata that does not occupy space in the final binary, but instructs the compiler how to generate code or what rules to enforce.
-   * The "Post-It Note": Attached to a definition to modify its translation.
+      * The "Post-It Note": Attached to a definition to modify its translation.
    2. types: Physical blueprints for memory. They define storage size and how the CPU should interpret the resulting bits.
-   * The "Data Shape": Defines the dimensions of the container.
+      * The "Data Shape": Defines the dimensions of the container.
    3. capabilities: Qualifiers that restrict or enable actions on an identity. They do not change bit-width, but they dictate the validity of operations and lifecycle rules.
-   * The "Permissions": Defines the lifecycle and mutability of the container.
+      * The "Permissions": Defines the lifecycle and mutability of the container.
    4. meta-capabilities: High-level classifications that determine a symbol's Fundamental Role. They exist between Types and Capabilities to define the "Identity" of a name.
-   * The "Job Description": Is this a math rule (`operator`), a storage bin (`variable`), or a recipe (`function`)?
+      * The "Job Description": Is this a math rule (`operator`), a storage bin (`variable`), or a recipe (`function`)?
    5. other: Hard-coded primitives necessary to bootstrap the language's grammar and structural logic.
-   * The "Glue": Without these, the parser could not identify definitions or navigate core control flow.
+      * The "Glue": Without these, the parser could not identify definitions or navigate core control flow.
 
 annotations:
   - atomic         : basic `seq_cst` guarantee with no specific memory order guaranteed
