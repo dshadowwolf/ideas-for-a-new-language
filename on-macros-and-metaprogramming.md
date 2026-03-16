@@ -56,3 +56,32 @@ define unless: macro <-> (condition: node, body: node) -> {
 // usage:
 unless ( ` ( it == 0 ) , { "Success" <=> print ; } );
 ```
+
+#### A proposed "logic" path
+A macro doesn't just have to "paste nodes" together to create the "new" subtree; it can use its own, internal logic to "normalize" them. See the following example of defining `if` as a macro:
+```turned-c
+define if : macro <-> ( condition : node, success : node, failure: node ) -> {
+   // Check if 'success' is an expression or a block
+   define s_node <-> [[ success.type == NODE_FUNCTION ]] ? success || `{ () <=> success };
+
+   // Check if 'failure' is an expression or a block
+   define f_node <-> [[ failure.type == NODE_FUNCTION ]] ? failure || `{ () <=> failure };
+
+   // Return the expanded Template
+   `[[ () <=> condition ]] ? s_node || f_node ;
+} ;
+// Note: This example relies on provisional macro introspection (`node.type`) and provisional control-flow lowering rules for `?` / `||`.
+```
+#### Macro Introspection Surface (Provisional)
+
+The following node-introspection features are exposed only to macro evaluation during Pass 1 (The Macro Pass).
+
+- `node.type`:
+  - Returns the node-kind tag for a macro-visible AST node.
+  - Valid examples include `NODE_FUNCTION`, `NODE_EXPRESSION`, `NODE_STRUCTURED`, and other Stage 0 node tags.
+- Scope of availability:
+  - Legal only inside macro-evaluation context.
+  - Use outside macro expansion is a semantic error.
+- Stability:
+  - This interface is provisional and may be narrowed or renamed in later revisions.
+  - To maintain portability between Stage 0 (C) and Stage 1 (Self-hosted), macro-visible node tags shall remain consistent with the internal node_type_t enumeration.
