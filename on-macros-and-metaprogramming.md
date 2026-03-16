@@ -85,3 +85,53 @@ The following node-introspection features are exposed only to macro evaluation d
 - Stability:
   - This interface is provisional and may be narrowed or renamed in later revisions.
   - To maintain portability between Stage 0 (C) and Stage 1 (Self-hosted), macro-visible node tags shall remain consistent with the internal node_type_t enumeration.
+
+##### Another possible expansion of form for macros
+```turned-c
+// A recursive macro to expand a variadic print
+define print_macro : macro <-> (args...) -> {
+    [[ args.count == 0 ]] ? `() || {
+        define first <-> args.head;
+        define rest  <-> args.tail;
+        `{
+             (first) <=> print_single ; // Print the first one
+             (rest)  <=> print_macro ;  // Recurse on the rest (at compile-time!)
+        } ;
+    } ;
+} ;
+```
+As I hope is obvious in the above "print" macro, this introduces the concept of "variadic arguments" that use a variation of `Variadic Tail-Packing` which can be used to provide for a function without a fixed number of arguments. This method requires only a way to "extract" the elements from the `structured data` that the `variable arguments` are packed into and, thanks to the language definition clearly stating that values are to be passed as "fat pointers" (that is, they contain both the raw data and a chunk of extra information) means they also carry just enough "type information" for run-time detection of the type to be entirely within the capabilities of even the `stage 0` compiler.
+
+Or, as can be seen in the following example, we can replace the originally proposed `switch-case` construct with a macro that expands to a chain of ternary selection statements similar to the previously suggested `if` macro, if on a slightly more grand scale:
+```turned-c
+// The recursive macro that builds a chain of 'if' logic
+define match_macro : macro <-> (subject: node, arms...) -> {
+    // Base Case: No more arms to match. 
+    // We return a "nothing" block or an error thunk.
+    [[ arms.count == 0 ]] ? `() || {
+        
+        // Split the current arm from the remaining arms
+        define current <-> arms.head;  // A structure like ( [[ it == 0 ]], { "Zero" } )
+        define rest    <-> arms.tail;
+        
+        // Peel the predicate and the block out of the current arm
+        define predicate <-> current.head;
+        define body      <-> current.tail;
+        
+        // Return a QUOTED ternary that "short-circuits" or recurses
+        `{
+            // 1. Inject the subject into the 'it' context for the predicate
+            define it <-> (subject);
+            
+            // 2. Evaluate the guard. 
+            // If it passes, run the body. 
+            // If it fails, recursively call 'match_macro' with the remaining arms.
+            (predicate) ? (body) <=> eval || (subject, rest) <=> match_macro ;
+        } ;
+    } ;
+} ;
+```
+Take everything within this section as provisional and barely more than a rough suggestion -- this is the beginning of a thought of how to provide most system primitives as macros to make the language look a touch more "classical" than the existing "everything that isn't an operator or keyword is a function provided by the Turned-C standard library" definition.
+
+Note 1) There _must_ be a limit of some sort to the depth of the recursion -- what this limit is is TBD, but exceeding it should result in an error and compilation halting.
+Note 2) The `args.count`/`args.head`/`args.tail` API is a rough sketch of an idea and the base name -- be it `args` or `arms` -- is taken from the "name" of the item given in the `structured definition` that has the `variadic` operator attached to it. These are not guaranteed to last for even the lifetime of this document as the idea behind things is iterated on and work done to make sure that things properly "meld" with the rest of the language. (it would not do for anything to do with such a core feature as the macro system to have bits that feel tacked on and the var-args syntax can actually extend beyond just macros)
