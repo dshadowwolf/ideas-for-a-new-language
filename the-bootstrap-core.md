@@ -242,38 +242,38 @@ This section collects implementation-oriented notes showing how the Bootstrap Co
 The following examples demonstrate how `type` definitions and type aliases may be constructed within the Bootstrap Core by binding language-level identities to backend-provided primitives.
 
 1) Definition of an Integer Type:
-```turned-c
-/* define a raw backend-provided type */
-@[ target: LLVM::i64, signed: false ]@
-define #u64 : type <-> () ;
+   ```turned-c
+   /* define a raw backend-provided type */
+   @[ target: LLVM::i64, signed: false ]@
+   define #u64 : type <-> () ;
 
-/* define its signed counterpart */
-@[ target: LLVM::i64, signed: true ]@
-define #i64 : type <-> () ;
+   /* define its signed counterpart */
+   @[ target: LLVM::i64, signed: true ]@
+   define #i64 : type <-> () ;
 
-/* define one of the few type-aliases that exist by default in Turned-C */
-@[ target: `i64 ]@ // metadata is inherited via this reference
-define #integer : type <-> () ;
-```
+   /* define one of the few type-aliases that exist by default in Turned-C */
+   @[ target: `i64 ]@ // metadata is inherited via this reference
+   define #integer : type <-> () ;
+   ```
 2) The Use of Pointers and Arrays:
-```turned-c
-/* Birth a named integer */
-define #x : i64 <-> 42 ;
+   ```turned-c
+   /* Birth a named integer */
+   define #x : i64 <-> 42 ;
 
-/* Birth a pointer to that integer using the & (Address-of) operator */
-define #ptr : i64 pointer <-> &x ;
+   /* Birth a pointer to that integer using the & (Address-of) operator */
+   define #ptr : i64 pointer <-> &x ;
 
-/* Birth an array of integers */
-define #list : i64 array <-> (1, 2, 3, 4, 5) ;
+   /* Birth an array of integers */
+   define #list : i64 array <-> (1, 2, 3, 4, 5) ;
 
-/* Accessing the third element (Index 2) */
-define #val : i64 <-> list[2] ; 
-```
+   /* Accessing the third element (Index 2) */
+   define #val : i64 <-> list[2] ; 
+   ```
 
 ##### Feature Specification
 
-1) The following examples demonstrate how `macro` definitions may be used to implement core features of the languages entirely within the Bootstrap Core.
-   1) The `constant_if` "statement":
+The following examples demonstrate how `macro` definitions may be used to implement core features of the languages entirely within the Bootstrap Core.
+1) The `constant_if` "statement":
    ```turned-c
    /*
     * This is an example of a "conditional compilation" macro.
@@ -294,7 +294,7 @@ define #val : i64 <-> list[2] ;
       } ;
    } ;
    ```
-   2) The "match" feature:
+2) The "match" feature:
    ```turned-c
    /*
     * This macro was written prior to the inclusion of the "unquote" operator in the language and should
@@ -329,55 +329,59 @@ define #val : i64 <-> list[2] ;
        } ;
    } ;
    ```
-2) The examples in this sub-section demonstrate how complex run-time features such as branching and looping can be implemented.
-   1) The `while` loop
-      ```turned-c
-      define while : function <-> (exit_condition: function boolean, core: function) -> {
-         [[ () <=> exit_condition ]] ?  ( ) <=> { }  || (exit_condition, core) <=> while ;
-      };
-      ```
-   2) The `for` loop
-      ```turned-c
-      define for : function <-> (init: function, exit: function boolean, inc: function, core: function) -> {
-         () <=> init; // run once
 
-         define for_int: function <-> () -> {
-            [[ () <=> exit ]] ? && () <=> {
-               () <=> core; // run the loop code
-               () <=> inc; // run the incrementor
-               () <=> for_int; // recurse!
-            } ;
+The examples in this sub-section demonstrate how complex run-time features such as branching and looping can be implemented.
+
+1) The `while` loop
+   ```turned-c
+   define while : function <-> (exit_condition: function boolean, core: function) -> {
+      [[ () <=> exit_condition ]] ?  ( ) <=> { }  || (exit_condition, core) <=> while ;
+   };
+   ```
+2) The `for` loop
+   ```turned-c
+   define for : function <-> (init: function, exit: function boolean, inc: function, core: function) -> {
+      () <=> init; // run once
+
+      define for_int: function <-> () -> {
+         [[ () <=> exit ]] ? && () <=> {
+            () <=> core; // run the loop code
+            () <=> inc; // run the incrementor
+            () <=> for_int; // recurse!
          } ;
-
-         () <=> for_int; // run the loop
       } ;
-      ```
-   3) The `if` "Statement"
-      ```turned-c
-      define if : function <-> (condition: function boolean, truth: function, falsity: function) -> {
-         [[ () <=> condition ]] ? () <=> truth || () <=> falsity ;
-      };
-      ```
-3) The following examples demonstrate how to bind new operators based on backend primitive operations
-   1) Addition
-      ```turned-c
-      /* Provision '+' as a core infix operator over integer */
-      @[ 
-         target: LLVM::BuildAdd,
-         precedence: 50,
-         associativity: left,
-         fixity: infix
-      ]@
-      define #+ : operator <-> () ;
-      ```
-   2) Equality
-      ```turned-c
-      /* Provision '==' as a core comparison operator over integer */
-      @[
-         target: LLVM::BuildICmpEQ,
-         precedence: 40,
-         associativity: left,
-         fixity: infix
-      ]@
-      define #== : operator <-> () ;
-      ```
+
+      () <=> for_int; // run the loop
+   } ;
+   ```
+3) The `if` "Statement"
+   ```turned-c
+   define if : function <-> (condition: function boolean, truth: function, falsity: function) -> {
+      [[ () <=> condition ]] ? () <=> truth || () <=> falsity ;
+   };
+   ```
+
+The following examples demonstrate how to bind new operators based on backend primitive operations
+
+1) Addition
+   ```turned-c
+   /* Provision '+' as a core infix operator over integer */
+   @[ 
+      target: LLVM::BuildAdd,
+      precedence: 50,
+      associativity: left,
+      fixity: infix
+   ]@
+   define #+ : operator <-> () ;
+   ```
+2) Equality
+   ```turned-c
+   /* Provision '==' as a core comparison operator over integer */
+   @[
+      target: LLVM::BuildICmpEQ,
+      precedence: 40,
+      associativity: left,
+      fixity: infix
+   ]@
+   define #== : operator <-> () ;
+   ```
