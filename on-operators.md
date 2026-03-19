@@ -11,8 +11,9 @@ While this specification establishes the theoretical framework of Turned-C, the 
   - Example: `);` is lexed as a single Compound Token and must resolve as a defined operator token (core or user-defined) to be valid. To treat them as a "Closing Structure" followed by a "Terminator" they must be separated by whitespace: `) ;`
 - Semantic Minimalism: The grammar is designed to minimize context-sensitive exceptions. The meaning of a token is determined by its Identity in the Symbol Table and its Precedence in the Pratt loop, not by surrounding "magical" keywords. Structural delimiters are first-class operators with full parse semantics, their behavior is still determined by operator identity, fixity, precedence and declared semantics.
   - Explicit Exceptions:
-    - `@[ ... ]@`: the parsing of the contents of an "annotation block" is handed to a dedicated sub-parser
-    - `[ ... ]`: This is a dedicated operator set that denotes a single operation -- "indexing an array" -- that has a fixed, built-in semantic contract. 
+    - `@[ ... ]@`: the parsing of the contents of a "Definition Annotation block" is handed to a dedicated sub-parser
+    - `![ ... ]!`: the parsing of the contents of a "Directive Annotation block" is handed to a dedicated sub-parser
+    - `[ ... ]`: This operator has three independent meanings, two that are tightly coupled and one that is related in concept if not execution. The different variations are all explained in this document, as are their semantics.
   
 ## Core Design Operators
 
@@ -32,6 +33,7 @@ These operators are central to the language design.
 | `[ ... ]` | 92 / 0 | left / none | Operator / method overload group | Parses only after a definition bind (`<->`); `]` seals overload set. |
 
 - **Note**: Method overloading via `[ ... ]` is provisional for the Bootstrap Core. Operator overloading (type-dispatch) is the primary motivating use case. Method overloading introduces name-mangling complexity (cf. `C++`) and may be deferred or excluded from the release specification of `Turned-C`.
+- **Note**: The actual format of how `[ ... ]` and operator / method overloading works has slightly changed to have a more idiomatic form and a much stricter definition. Actual documentation of this is planned for some time in the up-coming week. (Note added 19-MARCH-2026)
 
 #### `->`
 
