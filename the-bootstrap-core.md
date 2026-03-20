@@ -1,4 +1,13 @@
 ## On the Most Minimal Form of Turned-C Possible
+### An Informal Introduction
+
+The author’s name is less important than the reason this document exists. About a decade ago (as of March 19, 2026), I set out to design a new programming language—one that would be simple at its heart, and extensible from within, using its own mechanisms. Over the years, that vision grew more complex, and I lost sight of the original idea: keep the core minimal, containing only what is needed for the language to extend itself through macros and libraries.
+
+On a whim, I recently revisited some of my earliest notes. Rereading an old essay, I was struck by how far I’d drifted from that core principle. By stripping away the layers from the “great beast” I’d been building—`Turned-C`—and returning to its most essential pieces, I realized I was finally achieving the goal I’d set for myself a decade earlier.
+
+The words that reignited this project are quoted below:
+> The key points of this language are that the language itself is only going to provide the features that are needed for all required parts of the language itself to be implemented, with a few additions that are going to be there for the module writers and to assist in implementing the default runtime library. As part of keeping the core language as simple as possible, most of the syntactic sugar is actually going to be implemented in the full-featured macro-language that is defined as a companion – so that this language has a whole second level of utility.
+
 ### The "Bootstrap Core" Language Definition
 
 #### An Overview
@@ -135,6 +144,8 @@ Each feature in the Bootstrap Core exists because removing it would eliminate so
    - `[ ... ]` (`Index`)
      - Definition: A bracketed indexing operator used for positional access into an array or for scaled offset access through a pointer.
      - Reason: While `*` enables a single step of indirection, `[]` enables structured traversal of contiguous storage. Since `array` is part of the Bootstrap Core, the language also requires a core means of indexed access.
+     - Overload-Frame Form: A sealed container that wraps the overload signatures for a given operator or function name.
+     - Reason: This enables backend-specific dispatch binding, where different operand type signatures map to distinct generated instructions.
    - `...` (`Postfix Ellipsis`/`Variadic Capture`)
      - Definition: A postfix operator on a parameter identity (`name...`) that captures that argument position and all following arguments into a traversable list.
      - Reason: Without postfix ellipsis, the Bootstrap Core cannot define variadic macros or variadic functions in its own syntax, which blocks self-definition of core expandable constructs.
