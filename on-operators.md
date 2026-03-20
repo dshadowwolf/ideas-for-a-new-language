@@ -33,7 +33,7 @@ These operators are central to the language design.
 | `[ ... ]` | 92 / 0 | left / none | Operator / method overload group | Parses only after a definition bind (`<->`); `]` seals overload set. |
 
 - **Note**: Method overloading via `[ ... ]` is provisional for the Bootstrap Core. Operator overloading (type-dispatch) is the primary motivating use case. Method overloading introduces name-mangling complexity (cf. `C++`) and may be deferred or excluded from the release specification of `Turned-C`.
-- **Note**: The actual format of how `[ ... ]` and operator / method overloading works has slightly changed to have a more idiomatic form and a much stricter definition. Actual documentation of this is planned for some time in the up-coming week. (Note added 19-MARCH-2026)
+- **Note**: The actual format of how `[ ... ]` and operator / method overloading works has slightly changed to have a more idiomatic form and a much stricter definition. Actual documentation of this is planned for some time in the up-coming week. (Note added 19-MARCH-2026)  
 
 #### `->`
 
@@ -781,6 +781,8 @@ Technical Behavior:
     - Dual Parse Mode Rule:
       - Standard LED Mode: If no active alternation context exists, parse as a normal binary logical operator.
       - Alternation Context Mode: If a `?` has established an active `NODE_ALTERNATION` context, parse `&&`/`||` as branch operators that consume that context rather than introducing a new standalone boolean LHS.
+      - Cross-reference:
+        - The `&&` (guard) and `||` (choice) operators are most commonly used in conjunction with the `?` (alternation) operator. In this context, `?` establishes a branch point, while `&&` and `||` define the guarded and alternative execution paths, respectively. See the documentation for `?` for details on alternation and branch context.
   - Pass 4 (Semantic):
     - plain logical mode: boolean type enforcement
     - alternation mode: branch compatibility/type-join rules and valid `?` context checks
@@ -828,6 +830,8 @@ Technical Behavior:
     - Dual Parse Mode Rule:
       - Standard LED Mode: If no active alternation context exists, parse as a normal binary logical operator.
       - Alternation Context Mode: If a `?` has established an active `NODE_ALTERNATION` context, parse `&&`/`||` as branch operators that consume that context rather than introducing a new standalone boolean LHS.
+      - Cross-reference:
+        - The `&&` (guard) and `||` (choice) operators are most commonly used in conjunction with the `?` (alternation) operator. In this context, `?` establishes a branch point, while `&&` and `||` define the guarded and alternative execution paths, respectively. See the documentation for `?` for details on alternation and branch context.
   - Pass 4 (Semantic):
     - plain logical mode: boolean type enforcement
     - alternation mode: branch compatibility/type-join rules and valid `?` context checks
@@ -1215,6 +1219,9 @@ Definition:
   - The exponentiation operator (Precedence 75, Right-associative)
   - Performs the power operation, raising the LHS (base) to the power of the RHS (exponent).
 
+Overload Resolution:
+  - If either operand's type defines an overload for `**`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default exponentiation is performed.
+
 Operator Contract:
 - Surface:
   - LHS: Numeric expression (base).
@@ -1253,6 +1260,9 @@ Definition:
   - The Bitwise AND (`Intersection`) Operator (Precedence 65, Left-Associative).
   - Performs a bit-by-bit logical AND between two numeric operands.
 
+Overload Resolution:
+  - If either operand's type defines an overload for `&`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise AND is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Integral numeric expressions (integers or bit-fields).
@@ -1288,6 +1298,9 @@ Definition:
   - The Union Operator (Precedence 65, Left-Associative).
   - Performs a bit-by-bit logical OR; a bit is `1` if either corresponding operand bit is `1`.
 
+Overload Resolution:
+  - If either operand's type defines an overload for `|`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise OR is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Integral numeric expressions (integers or bit-fields).
@@ -1321,6 +1334,9 @@ Technical Behavior:
 Definition:
   - The Symmetric Difference Operator (Precedence 65, Left-Associative).
   - Performs a bit-by-bit logical XOR; a bit is `1` if the corresponding bits differ.
+
+Overload Resolution:
+  - If either operand's type defines an overload for `^`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise XOR is performed.
 
 Operator Contract:
 - Surface:
@@ -1357,6 +1373,9 @@ Definition:
   - The Arithmetic Product operator (Precedence 60, Left-Associative).
   - In a sign-agnostic machine (LLVM), this is the simplest of the trio.
 
+Overload Resolution:
+  - If either operand's type defines an overload for `*`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default arithmetic multiplication is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Numeric expressions.
@@ -1384,6 +1403,9 @@ Technical Behavior:
 Definition:
    - The Arithmetic Quotient operator (Precedence 60, Left-Associative).
    - Performs the division of the LHS (dividend) by the RHS (divisor).
+
+Overload Resolution:
+  - If either operand's type defines an overload for `/`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default arithmetic division is performed.
 
 Operator Contract:
 - Surface:
@@ -1418,6 +1440,9 @@ Definition:
   - Performs the division of the LHS (dividend) by the RHS (divisor) and returns the remainder
   - For integers, this is the true machine-level remainder, not the mathematical modulo: the sign of the result matches the dividend (C/LLVM semantics).
   - For floating-point operands, computes the IEEE 754 floating-point remainder (not mathematical modulo).
+
+Overload Resolution:
+  - If either operand's type defines an overload for `%`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default remainder operation is performed.
 
 Operator Contract:
 - Surface:
@@ -1455,6 +1480,9 @@ Definition:
   - Performs the addition of the LHS and the RHS and returns the result.
   - Pointer Note: When one operand is a `pointer` and the other is an `integer`, the operator performs Pointer Arithmetic (Address Offsetting).
 
+Overload Resolution:
+  - If either operand's type defines an overload for `+`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default arithmetic or pointer addition is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Numeric expressions (Integers/Floats) OR one Pointer and one Integer.
@@ -1468,7 +1496,7 @@ Architectural Contract:
     - Signed Integers: Overflow is Undefined Behavior (mapping to LLVM `nsw` in the reference implementation)
     - Unsigned Integers: Overflow follows Two's Complement Wraparound (mapping to LLVM `nuw` in the reference implementation)
     - Floats: Follows IEEE 754 addition rules.
-  - Pointer Scaling: When adding to a pointer, the integer operand is automatically scaled by the `sizeof(T)` of the pointer's base type.
+  - Pointer Scaling: When adding to a pointer, the integer operand is automatically scaled by `sizeof(T)`, where `T` is the type the pointer points to.
   - Commutativity: Arithmetic addition is commutative `(a + b == b + a)`. Pointer-integer addition is also commutative in syntax, but the compiler must treat the pointer as the "Base" and the integer as the "Index."
 
 Semantic Interpretation:
@@ -1492,6 +1520,9 @@ Definition:
   - Performs the subtraction of the RHS from the LHS and returns the result.
   - Pointer Note: `-` serves as either a Linear Regression (Pointer - Integer) or a Distance Calculation (Pointer - Pointer)
 
+Overload Resolution:
+  - If either operand's type defines an overload for `-`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default arithmetic or pointer subtraction is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS:
@@ -1508,7 +1539,7 @@ Operator Contract:
 
 Architectural Contract:
   - The Air-Gap Requirement: Due to Hyphen-Glue lexing, the `-` operator must be separated by whitespace from adjacent `BAREWORD` identifiers to be parsed as an operator. Without whitespace, it is consumed as a part of a composite identifier.
-  - Pointer Regression: Subtracting an integer from a pointer moves the address "backward" in memory, scaled by `sizeof(T)`.
+  - Pointer Regression: Subtracting an integer from a pointer moves the address "backward" in memory, scaled by `sizeof(T)`, where `T` is the type the pointer points to.
   - Pointer Distance: Subtracting one pointer from another of the same type yields an integer representing the number of elements between them `(scaled by 1/sizeof(T))`. Subtraction between pointers of different types is a Pass 4 (Semantic) Error.
   - Overflow Policy: Matches the Addition (`+`) contract for nsw/nuw flags in LLVM.
 
@@ -1533,6 +1564,12 @@ Technical Behavior:
 Definition:
   - The "Bitwise Shift Left" operator (Precedence 45, Left-Associative)
   - Moves the bit-pattern of the LHS to the left by the number of positions specified by the RHS, filling vacated lower bits with `0`
+
+Overload Resolution:
+  - If the LHS type defines an overload for `<<`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise shift is performed.
+
+Overload Resolution:
+  - If the LHS type defines an overload for `<<`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise shift is performed.
 
 Operator Contract:
 - Surface:
@@ -1568,6 +1605,12 @@ Definition:
   - Moves the bit-pattern of the LHS to the right by the RHS positions; bits shifted out of the low end are discarded.
   - Signedness Rule: The "fill" for vacated upper bits depends on the type: Signed types preserve the sign bit (Arithmetic), while Unsigned types fill with zeros (Logical).
 
+Overload Resolution:
+  - If the LHS type defines an overload for `>>`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise shift is performed.
+
+Overload Resolution:
+  - If the LHS type defines an overload for `>>`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default bitwise shift is performed.
+
 Operator Contract:
 - Surface:
   - LHS: The integer value or bit-field to be shifted.
@@ -1594,12 +1637,14 @@ Technical Behavior:
     - Verifies both operands are integral types.
     - Literal Check: If the RHS is a constant, verifies it is within the range $[0, \text{bit\_width} - 1]$.
     - Metadata Lookup: Retrieves the signed flag from the LHS Typespec to determine the shift variant.
+      - If the signedness metadata is missing (such as a type referencing the "Naked" for of LLVM::i64), the compiler should choose a safe default - the "Logical" shift (`lshr`) to prevent accidental sign-bit smearing.
   - Pass 6 (Emitter):
     - Constant Folding: Resolves literal shifts at compile-time.
     - Standard Emission:
       - For signed types emits the `ashr` LLVM primitive
       - For unsigned types emits the `lshr` LLVM primitive
-
+      - For "naked" types (thost that lack signeness metadata) the `lshr` LLVM primitive shall be emitted. (See the note under the Pass 4 details for information on why)
+  
 #### `<<<` and `>>>`
 
 Definition:
@@ -1607,6 +1652,9 @@ Definition:
   - `<<<`: Moves bits to the left; the MSB (`Most Significant Bit`) rolls around to the LSB (`Least Significant Bit`) position
   - `>>>`: Moves bits to the right; The LSB rolls around to the MSB position
   - Example: `0b1001 <<< 1` yields `0b0011` (for a 4-bit value)
+
+Overload Resolution:
+  - If the LHS type defines an overload for `<<<` or `>>>`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default rotation is performed.
 
 Operator Contract:
 - Surface:
@@ -1729,6 +1777,9 @@ Definition:
   - Performs a logical comparison of the magnitudes or contents of two operands.
   - Literal Note: If both LHS and RHS are constants, the compiler performs a Constant Fold, replacing the expression with a `true` or `false` literal during Pass 4.
 
+Overload Resolution:
+  - If the LHS type defines an intrinsic or overload for `==`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default value equality is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Numeric expressions, bit-fields, or types with an `intrinsic` equality operator.
@@ -1767,6 +1818,9 @@ Definition:
   - Performs a logical comparison; returns `true` if the magnitudes or states of the operands differ.
   - On a technical level this is, literally, the inverse of the `Value Equality` operator, `==`
 
+Overload Resolution:
+  - If the LHS type defines an intrinsic or overload for `!=`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default value inequality is performed.
+
 Operator Contract:
 - See `==` and invert the logic involved.
 
@@ -1794,6 +1848,9 @@ Technical Behavior:
 Definition:
   - An "Ordered Comparison" operator (Precedence 40, Left-Associative)
   - Performs a magnitude comparison; returns `true` if the LHS value is strictly lower than the RHS value.
+
+Overload Resolution:
+  - If the LHS type defines an overload for `<`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default less-than comparison is performed.
 
 Operator Contract:
 - Surface:
@@ -1832,6 +1889,9 @@ Definition:
   - An "Ordered Comparison" operator (Precedence 40, Left-Associative)
   - Performs a magnitude comparison; returns `true` if the LHS value is strictly greater than the RHS value.
 
+Overload Resolution:
+  - If the LHS type defines an overload for `>`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default greater-than comparison is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Numeric expressions (Integers/Floats).
@@ -1869,6 +1929,9 @@ Definition:
   - An "Ordered Comparison" operator (Precedence 40, Left-Associative)
   - Performs a magnitude comparison; returns `true` if the LHS value is less than or equal to the RHS value.
 
+Overload Resolution:
+  - If the LHS type defines an overload for `<=`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default less-than-or-equal comparison is performed.
+
 Operator Contract:
 - Surface:
   - LHS/RHS: Numeric expressions (Integers/Floats).
@@ -1905,6 +1968,9 @@ Technical Behavior:
 Definition:
   - An "Ordered Comparison" operator (Precedence 40, Left-Associative)
   - Performs a magnitude comparison; returns `true` if the LHS value is equal to or greater than the RHS value.
+
+Overload Resolution:
+  - If the LHS type defines an overload for `>=`, the operator overloading system dispatches to the appropriate implementation. Otherwise, the default greater-than-or-equal comparison is performed.
 
 Operator Contract:
 - Surface:
